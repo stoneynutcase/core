@@ -56,7 +56,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: VoipConfigEntry) -> bool
         or (await hass.auth.async_get_user(entry.data["user"])) is None
     ):
         voip_user = await hass.auth.async_create_system_user(
-            "Voice over IP", group_ids=[GROUP_ID_USER]
+            "Voice over IP", "voip@has.local", group_ids=[GROUP_ID_USER]
         )
         hass.config_entries.async_update_entry(
             entry, data={**entry.data, "user": voip_user.id}

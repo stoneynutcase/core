@@ -262,6 +262,7 @@ class AuthManager:
     async def async_create_system_user(
         self,
         name: str,
+        email: str,
         *,
         group_ids: list[str] | None = None,
         local_only: bool | None = None,
@@ -269,6 +270,7 @@ class AuthManager:
         """Create a system user."""
         user = await self._store.async_create_user(
             name=name,
+            email=email,
             system_generated=True,
             is_active=True,
             group_ids=group_ids or [],
@@ -282,6 +284,7 @@ class AuthManager:
     async def async_create_user(
         self,
         name: str,
+        email: str,
         *,
         group_ids: list[str] | None = None,
         local_only: bool | None = None,
@@ -289,6 +292,7 @@ class AuthManager:
         """Create a user."""
         kwargs: dict[str, Any] = {
             "name": name,
+            "email": email,
             "is_active": True,
             "group_ids": group_ids or [],
             "local_only": local_only,
@@ -323,6 +327,7 @@ class AuthManager:
         user = await self._store.async_create_user(
             credentials=credentials,
             name=info.name,
+            email="",
             is_active=info.is_active,
             group_ids=[GROUP_ID_ADMIN if info.group is None else info.group],
             local_only=info.local_only,
@@ -362,6 +367,7 @@ class AuthManager:
         self,
         user: models.User,
         name: str | None = None,
+        email: str | None = None,
         is_active: bool | None = None,
         group_ids: list[str] | None = None,
         local_only: bool | None = None,
@@ -371,6 +377,7 @@ class AuthManager:
             attr_name: value
             for attr_name, value in (
                 ("name", name),
+                ("email", email),
                 ("group_ids", group_ids),
                 ("local_only", local_only),
             )

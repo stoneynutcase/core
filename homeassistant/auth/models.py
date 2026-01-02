@@ -60,6 +60,7 @@ class User:
     """A user."""
 
     name: str | None = attr.ib()
+    email: str | None = attr.ib()
     perm_lookup: perm_mdl.PermissionLookup = attr.ib(eq=False, order=False)
     id: str = attr.ib(factory=lambda: uuid.uuid4().hex)
     is_owner: bool = attr.ib(default=False, on_setattr=_handle_permissions_change)

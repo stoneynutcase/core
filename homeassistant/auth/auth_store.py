@@ -83,6 +83,7 @@ class AuthStore:
     async def async_create_user(
         self,
         name: str | None,
+        email: str | None,
         is_owner: bool | None = None,
         is_active: bool | None = None,
         system_generated: bool | None = None,
@@ -99,6 +100,7 @@ class AuthStore:
 
         kwargs: dict[str, Any] = {
             "name": name,
+            "email": email,
             # Until we get group management, we just put everyone in the
             # same group.
             "groups": groups,
@@ -153,6 +155,7 @@ class AuthStore:
         self,
         user: models.User,
         name: str | None = None,
+        email: str | None = None,
         is_active: bool | None = None,
         group_ids: list[str] | None = None,
         local_only: bool | None = None,
@@ -169,6 +172,7 @@ class AuthStore:
 
         for attr_name, value in (
             ("name", name),
+            ("email", email),
             ("is_active", is_active),
             ("local_only", local_only),
         ):
@@ -428,6 +432,7 @@ class AuthStore:
 
             users[user_dict["id"]] = models.User(
                 name=user_dict["name"],
+                email=user_dict["email"],
                 groups=user_groups,
                 id=user_dict["id"],
                 is_owner=user_dict["is_owner"],
@@ -529,6 +534,7 @@ class AuthStore:
                 "is_owner": user.is_owner,
                 "is_active": user.is_active,
                 "name": user.name,
+                "email": user.email,
                 "system_generated": user.system_generated,
                 "local_only": user.local_only,
             }

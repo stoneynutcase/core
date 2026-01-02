@@ -401,7 +401,7 @@ async def test_generating_system_user(hass: HomeAssistant) -> None:
     hass.bus.async_listen("user_added", user_added)
 
     manager = await auth.auth_manager_from_config(hass, [], [])
-    user = await manager.async_create_system_user("Hass.io")
+    user = await manager.async_create_system_user("Hass.io", "admin@has.local")
     token = await manager.async_create_refresh_token(user)
     assert user.system_generated
     assert user.groups == []
@@ -417,7 +417,7 @@ async def test_generating_system_user(hass: HomeAssistant) -> None:
 
     # Passing arguments
     user = await manager.async_create_system_user(
-        "Hass.io", group_ids=[GROUP_ID_ADMIN], local_only=True
+        "Hass.io", "admin@has.local", group_ids=[GROUP_ID_ADMIN], local_only=True
     )
     token = await manager.async_create_refresh_token(user)
     assert user.system_generated
@@ -455,7 +455,7 @@ async def test_refresh_token_not_requires_client_for_system_user(
 ) -> None:
     """Test create refresh token for a system user w/o client_id."""
     manager = await auth.auth_manager_from_config(hass, [], [])
-    user = await manager.async_create_system_user("Hass.io")
+    user = await manager.async_create_system_user("Hass.io", "admin@has.local")
     assert user.system_generated is True
 
     with pytest.raises(ValueError):
@@ -1052,7 +1052,9 @@ async def test_enable_mfa_for_user(
     assert "insecure_example" in modules
 
     # system user cannot enable mfa
-    system_user = await manager.async_create_system_user("system-user")
+    system_user = await manager.async_create_system_user(
+        "system-user", "admin@has.local"
+    )
     with pytest.raises(ValueError):
         await manager.async_enable_user_mfa(
             system_user, "insecure_example", {"pin": "test-pin"}

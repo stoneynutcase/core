@@ -171,6 +171,7 @@ class UserOnboardingView(_BaseOnboardingStepView):
         vol.Schema(
             {
                 vol.Required("name"): str,
+                vol.Optional("email"): str,
                 vol.Required("username"): str,
                 vol.Required("password"): str,
                 vol.Required("client_id"): str,
@@ -190,7 +191,7 @@ class UserOnboardingView(_BaseOnboardingStepView):
             await provider.async_initialize()
 
             user = await hass.auth.async_create_user(
-                data["name"], group_ids=[GROUP_ID_ADMIN]
+                data["name"], data["email"], group_ids=[GROUP_ID_ADMIN]
             )
             await provider.async_add_auth(data["username"], data["password"])
             credentials = await provider.async_get_or_create_credentials(
@@ -198,7 +199,9 @@ class UserOnboardingView(_BaseOnboardingStepView):
             )
             await hass.auth.async_link_user(user, credentials)
             if await async_wait_component(hass, "person"):
-                await person.async_create_person(hass, data["name"], user_id=user.id)
+                await person.async_create_person(
+                    hass, data["name"], data["email"], user_id=user.id
+                )
 
             # Create default areas using the users supplied language.
             translations = await async_get_translations(

@@ -17,6 +17,7 @@ SERVICE_SHOW_VIEW = "show_lovelace_view"
 ATTR_VIEW_PATH = "view_path"
 ATTR_URL_PATH = "dashboard_path"
 CAST_USER_NAME = "Home Assistant Cast"
+CAST_USER_EMAIL = "admin@local.host"
 NO_URL_AVAILABLE_ERROR = (
     "Home Assistant Cast requires your instance to be reachable via HTTPS. Enable Home"
     " Assistant Cloud or set up an external URL with valid SSL certificates"
@@ -35,7 +36,7 @@ async def async_setup_ha_cast(
 
     if user is None:
         user = await hass.auth.async_create_system_user(
-            CAST_USER_NAME, group_ids=[auth.const.GROUP_ID_ADMIN]
+            CAST_USER_NAME, CAST_USER_EMAIL, group_ids=[auth.const.GROUP_ID_ADMIN]
         )
         hass.config_entries.async_update_entry(
             entry, data={**entry.data, "user_id": user.id}

@@ -18,11 +18,13 @@ from homeassistant.components.device_tracker import (
 from homeassistant.components.zone import ENTITY_ID_HOME
 from homeassistant.const import (
     ATTR_EDITABLE,
+    ATTR_EMAIL,
     ATTR_GPS_ACCURACY,
     ATTR_ID,
     ATTR_LATITUDE,
     ATTR_LONGITUDE,
     ATTR_NAME,
+    CONF_EMAIL,
     CONF_ID,
     CONF_NAME,
     EVENT_HOMEASSISTANT_START,
@@ -74,6 +76,7 @@ PERSON_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_ID): cv.string,
         vol.Required(CONF_NAME): cv.string,
+        vol.Required(CONF_EMAIL): cv.string,
         vol.Optional(CONF_USER_ID): cv.string,
         vol.Optional(CONF_DEVICE_TRACKERS, default=[]): vol.All(
             cv.ensure_list, cv.entities_domain(DEVICE_TRACKER_DOMAIN)
@@ -96,6 +99,7 @@ CONFIG_SCHEMA = vol.Schema(
 async def async_create_person(
     hass: HomeAssistant,
     name: str,
+    email: str,
     *,
     user_id: str | None = None,
     device_trackers: list[str] | None = None,
@@ -104,6 +108,7 @@ async def async_create_person(
     await hass.data[DOMAIN][1].async_create_item(
         {
             ATTR_NAME: name,
+            ATTR_EMAIL: email,
             ATTR_USER_ID: user_id,
             CONF_DEVICE_TRACKERS: device_trackers or [],
         }
@@ -167,6 +172,7 @@ def entities_in_person(hass: HomeAssistant, entity_id: str) -> list[str]:
 
 CREATE_FIELDS: VolDictType = {
     vol.Required(CONF_NAME): vol.All(str, vol.Length(min=1)),
+    vol.Required(CONF_EMAIL): vol.All(str, vol.Length(min=1)),
     vol.Optional(CONF_USER_ID): vol.Any(str, None),
     vol.Optional(CONF_DEVICE_TRACKERS, default=list): vol.All(
         cv.ensure_list, cv.entities_domain(DEVICE_TRACKER_DOMAIN)
@@ -177,6 +183,7 @@ CREATE_FIELDS: VolDictType = {
 
 UPDATE_FIELDS: VolDictType = {
     vol.Optional(CONF_NAME): vol.All(str, vol.Length(min=1)),
+    vol.Optional(CONF_EMAIL): vol.All(str, vol.Length(min=1)),
     vol.Optional(CONF_USER_ID): vol.Any(str, None),
     vol.Optional(CONF_DEVICE_TRACKERS, default=list): vol.All(
         cv.ensure_list, cv.entities_domain(DEVICE_TRACKER_DOMAIN)

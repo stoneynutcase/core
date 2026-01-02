@@ -254,7 +254,7 @@ async def test_refresh_token_system_generated(
 ) -> None:
     """Test that we can get access tokens for system generated user."""
     client = await async_setup_auth(hass, aiohttp_client)
-    user = await hass.auth.async_create_system_user("Test System")
+    user = await hass.auth.async_create_system_user("Test System", "admin@has.local")
     refresh_token = await hass.auth.async_create_refresh_token(user, None)
 
     resp = await client.post(

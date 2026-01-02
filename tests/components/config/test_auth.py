@@ -311,7 +311,7 @@ async def test_update_system_generated(
     """Test update command cannot update a system generated."""
     client = await hass_ws_client(hass)
 
-    user = await hass.auth.async_create_system_user("Test user")
+    user = await hass.auth.async_create_system_user("Test user", "admin@has.local")
 
     await client.send_json(
         {
@@ -393,7 +393,7 @@ async def test_deactivate_system_generated(
     """Test that owner cannot be deactivated."""
     client = await hass_ws_client(hass)
 
-    user = await hass.auth.async_create_system_user("Test user")
+    user = await hass.auth.async_create_system_user("Test user", "admin@has.local")
     assert user.is_active is True
     assert user.system_generated is True
     assert user.is_owner is False

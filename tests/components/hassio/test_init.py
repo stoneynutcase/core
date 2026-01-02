@@ -341,7 +341,7 @@ async def test_setup_adds_admin_group_to_user(
 ) -> None:
     """Test setup with API push default data."""
     # Create user without admin
-    user = await hass.auth.async_create_system_user("Hass.io")
+    user = await hass.auth.async_create_system_user("Hass.io", "admin@has.local")
     assert not user.is_admin
     await hass.auth.async_create_refresh_token(user)
 
@@ -365,7 +365,7 @@ async def test_setup_migrate_user_name(
 ) -> None:
     """Test setup with migrating the user name."""
     # Create user with old name
-    user = await hass.auth.async_create_system_user("Hass.io")
+    user = await hass.auth.async_create_system_user("Hass.io", "admin@has.local")
     await hass.auth.async_create_refresh_token(user)
 
     hass_storage[STORAGE_KEY] = {
@@ -388,7 +388,7 @@ async def test_setup_api_existing_hassio_user(
     supervisor_client: AsyncMock,
 ) -> None:
     """Test setup with API push default data."""
-    user = await hass.auth.async_create_system_user("Hass.io test")
+    user = await hass.auth.async_create_system_user("Hass.io test", "admin@has.local")
     token = await hass.auth.async_create_refresh_token(user)
     hass_storage[STORAGE_KEY] = {"version": 1, "data": {"hassio_user": user.id}}
     with patch.dict(os.environ, MOCK_ENVIRON):

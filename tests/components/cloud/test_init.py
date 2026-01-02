@@ -135,7 +135,7 @@ async def test_setup_existing_cloud_user(
     hass: HomeAssistant, hass_storage: dict[str, Any]
 ) -> None:
     """Test setup with API push default data."""
-    user = await hass.auth.async_create_system_user("Cloud test")
+    user = await hass.auth.async_create_system_user("Cloud test", "admin@has.local")
     hass_storage[STORAGE_KEY] = {"version": 1, "data": {"cloud_user": user.id}}
     with patch("hass_nabucasa.Cloud.initialize"):
         result = await async_setup_component(

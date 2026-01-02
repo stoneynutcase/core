@@ -324,7 +324,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa:
 
     if refresh_token is None:
         user = await hass.auth.async_create_system_user(
-            HASSIO_USER_NAME, group_ids=[GROUP_ID_ADMIN]
+            HASSIO_USER_NAME, "supervisor@has.local", group_ids=[GROUP_ID_ADMIN]
         )
         refresh_token = await hass.auth.async_create_refresh_token(user)
         config_store.update(hassio_user=user.id)

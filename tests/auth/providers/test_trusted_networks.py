@@ -291,11 +291,11 @@ async def test_trusted_users_login(
     provider_with_user: tn_auth.TrustedNetworksAuthProvider,
 ) -> None:
     """Test available user list changed per different IP."""
-    owner = await manager_with_user.async_create_user("test-owner")
+    owner = await manager_with_user.async_create_user("test-owner", "admin@has.local")
     sys_user = await manager_with_user.async_create_system_user(
-        "test-sys-user"
+        "test-sys-user", "admin@has.local"
     )  # system user will not be available to select
-    user = await manager_with_user.async_create_user("test-user")
+    user = await manager_with_user.async_create_user("test-user", "admin@has.local")
 
     # change the trusted users config
     config = provider_with_user.config["trusted_users"]

@@ -80,6 +80,7 @@ async def websocket_delete(
     {
         vol.Required("type"): "config/auth/create",
         vol.Required("name"): str,
+        vol.Optional("email"): str,
         vol.Optional("group_ids"): [str],
         vol.Optional("local_only"): bool,
     }
@@ -92,7 +93,10 @@ async def websocket_create(
 ) -> None:
     """Create a user."""
     user = await hass.auth.async_create_user(
-        msg["name"], group_ids=msg.get("group_ids"), local_only=msg.get("local_only")
+        msg["name"],
+        msg["email"],
+        group_ids=msg.get("group_ids"),
+        local_only=msg.get("local_only"),
     )
 
     connection.send_message(
@@ -106,6 +110,7 @@ async def websocket_create(
         vol.Required("type"): "config/auth/update",
         vol.Required("user_id"): str,
         vol.Optional("name"): str,
+        vol.Optional("email"): str,
         vol.Optional("is_active"): bool,
         vol.Optional("group_ids"): [str],
         vol.Optional("local_only"): bool,
@@ -172,6 +177,7 @@ def _user_info(user: User) -> dict[str, Any]:
         "id": user.id,
         "username": ha_username,
         "name": user.name,
+        "email": user.email,
         "is_owner": user.is_owner,
         "is_active": user.is_active,
         "local_only": user.local_only,

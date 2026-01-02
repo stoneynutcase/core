@@ -134,7 +134,7 @@ async def async_setup_auth(
 
     if refresh_token is None:
         user = await hass.auth.async_create_system_user(
-            CONTENT_USER_NAME, group_ids=[GROUP_ID_READ_ONLY]
+            CONTENT_USER_NAME, "content@has.local", group_ids=[GROUP_ID_READ_ONLY]
         )
         refresh_token = await hass.auth.async_create_refresh_token(user)
         data["content_user"] = user.id

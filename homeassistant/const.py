@@ -332,6 +332,9 @@ ATTR_ID: Final = "id"
 # Name
 ATTR_NAME: Final = "name"
 
+# Name
+ATTR_EMAIL: Final = "email"
+
 # Contains one string or a list of strings, each being an entity id
 ATTR_ENTITY_ID: Final = "entity_id"
 
